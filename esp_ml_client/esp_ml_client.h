@@ -1,16 +1,26 @@
-// esp32_ml_client.h
-#ifndef ESP_ML_CLIENT_H
-#define ESP_ML_CLIENT_H
+#ifndef ESP_ML_Client_h
+#define ESP_ML_Client_h
 
-#include "esp_err.h"
+#include <Arduino.h>
+#include <ArduinoJson.h>
+#include <HTTPClient.h>
 
-void esp_ml_init(int num_features);
-void append_sample(float *features, float label, int n_features);
-char *create_json_payload(int n_features, int n_samples);
-esp_err_t send_data_to_server(const char *json_payload, const char *server_url);
+class ESP_ML_Client {
+  public:
+    ESP_ML_Client(int n_features, int max_samples = 100);
+    ~ESP_ML_Client();
+    void appendSample(float *features, float label);
+    String createJsonPayload();
+    bool sendDataToServer(const char *server_url, const String &json_payload);
+    bool getWeights(const char *server_url, float *weights, float &bias);
+    float predict(float *features, float *weights, float bias);
 
-float sigmoid(float z);
-float predict(float *x, float *w, float bias, int n_features);
-void update_weights(float *new_weights, float new_bias, int n_features);
+  private:
+    int n_features;
+    int max_samples;
+    int current_index;
+    float **X_buffer;
+    float *y_buffer;
+};
 
 #endif
