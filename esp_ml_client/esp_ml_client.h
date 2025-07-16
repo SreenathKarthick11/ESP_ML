@@ -14,6 +14,9 @@ class ESP_ML_Client {
     bool sendDataToServer(const char *server_url, const String &json_payload);
     bool getWeights(const char *server_url, float *weights, float &bias);
     float predict(float *features, float *weights, float bias);
+    int getServerPrediction(const char *server_url, float *features);
+    bool setModelType(const char *server_url, const char *model_type, int max_depth = 3);
+    int predict_class(float *features, float *weights, float bias);
 
   private:
     int n_features;

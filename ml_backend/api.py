@@ -29,5 +29,24 @@ def get_weights():
 def ping():
     return "Server alive!"
 
+@app.route('/predict_class', methods=['POST'])
+def predict_class():
+    data = request.get_json()
+    X = np.array(data["X"])  # Shape: [[f1, f2, ...]]
+    preds = manager.predict(X)  # NumPy array like [0]
+    return jsonify({"prediction": int(preds[0])})
+
+
+@app.route('/set_model', methods=['POST'])
+def set_model():
+    data = request.get_json()
+    model_type = data.get("model_type", "logistic")
+    max_depth = data.get("max_depth", 3)
+    try:
+        manager.set_model(model_type, max_depth)
+        return jsonify({"message": f"Model set to {model_type} with depth={max_depth}"})
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 400
+    
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)

@@ -1,6 +1,6 @@
 #include "ESP_ML_Client.h"
 
-ESP_ML_Client::ESP_ML_Client(int n_features, int max_samples = 100) {
+ESP_ML_Client::ESP_ML_Client(int n_features, int max_samples) {
   this->n_features = n_features;
   this->max_samples = max_samples;
   this->current_index = 0;
@@ -94,4 +94,61 @@ float ESP_ML_Client::predict(float *features, float *weights, float bias) {
   }
   z += bias;
   return 1.0 / (1.0 + exp(-z));
+}
+
+int ESP_ML_Client::predict_class(float *features,float *weights,float bias){
+  float z = 0.0f;
+  for (int i = 0; i < n_features; i++) {
+    z += features[i] * weights[i];
+  }
+  z += bias;
+  float prob =1.0 / (1.0 + exp(-z));
+  return (prob > 0.5) ? 1 : 0;
+}
+
+int ESP_ML_Client::getServerPrediction(const char *server_url, float *features) {
+  HTTPClient http;
+  StaticJsonDocument<512> doc;
+  JsonArray X = doc.createNestedArray("X");
+  JsonArray sample = X.createNestedArray();
+
+  for (int i = 0; i < n_features; i++) {
+    sample.add(features[i]);
+  }
+
+  String payload;
+  serializeJson(doc, payload);
+
+  http.begin(server_url);
+  http.addHeader("Content-Type", "application/json");
+  int httpResponseCode = http.POST(payload);
+
+  if (httpResponseCode > 0) {
+    String response = http.getString();
+    StaticJsonDocument<256> responseDoc;
+    DeserializationError err = deserializeJson(responseDoc, response);
+    if (!err && responseDoc.containsKey("prediction")) {
+      return responseDoc["prediction"];
+    }
+  }
+
+  http.end();
+  return -1;  // Return -1 on failure
+}
+
+bool ESP_ML_Client::setModelType(const char *server_url, const char *model_type, int max_depth) {
+  HTTPClient http;
+  StaticJsonDocument<256> doc;
+  doc["model_type"] = model_type;
+  doc["max_depth"] = max_depth;
+
+  String payload;
+  serializeJson(doc, payload);
+
+  http.begin(server_url);
+  http.addHeader("Content-Type", "application/json");
+  int httpResponseCode = http.POST(payload);
+
+  http.end();
+  return httpResponseCode == 200;
 }
