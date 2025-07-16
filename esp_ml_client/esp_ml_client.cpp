@@ -29,6 +29,7 @@ void ESP_ML_Client::appendSample(float *features, float label) {
   current_index++;
 }
 
+
 String ESP_ML_Client::createJsonPayload() {
   StaticJsonDocument<8192> doc;
   JsonArray X = doc.createNestedArray("X");
@@ -43,9 +44,14 @@ String ESP_ML_Client::createJsonPayload() {
   }
 
   String output;
-  serializeJson(doc, output);
+  serializeJson(doc, output);  
+// { example json
+//   "X": [[f1, f2, ..., fn], ..., [...]],
+//   "y": [label1, label2, ...]
+// }
   return output;
 }
+
 
 bool ESP_ML_Client::sendDataToServer(const char *server_url, const String &json_payload) {
   HTTPClient http;
