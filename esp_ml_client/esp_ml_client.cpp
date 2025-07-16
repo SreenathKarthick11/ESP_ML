@@ -1,6 +1,6 @@
 #include "ESP_ML_Client.h"
 
-ESP_ML_Client::ESP_ML_Client(int n_features, int max_samples) {
+ESP_ML_Client::ESP_ML_Client(int n_features, int max_samples = 100) {
   this->n_features = n_features;
   this->max_samples = max_samples;
   this->current_index = 0;
