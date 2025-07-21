@@ -6,28 +6,22 @@ import json
 import uuid
 import os
 
+from db import init_db
+init_db()
 app = Flask(__name__)
 
 # -------------------------------
 # Persistent API key system
 # -------------------------------
-KEY_FILE = "api_keys.json"
-
-def load_keys():
-    if os.path.exists(KEY_FILE):
-        with open(KEY_FILE, "r") as f:
-            return json.load(f)
-    return {}
-
-def save_keys(keys):
-    with open(KEY_FILE, "w") as f:
-        json.dump(keys, f)
-
-API_KEYS = load_keys()
+from db import Session, APIKey
 
 def check_api_key():
     key = request.headers.get("X-API-Key")
-    return key in API_KEYS.values()
+    session = Session()
+    valid = session.query(APIKey).filter_by(api_key=key).first() is not None
+    session.close()
+    return valid
+
 
 @app.route('/register_user', methods=['POST'])
 def register_user():
@@ -35,13 +29,21 @@ def register_user():
     username = data.get("username")
     if not username:
         return jsonify({"error": "Username is required"}), 400
-    if username in API_KEYS:
-        return jsonify({"message": "User already exists", "api_key": API_KEYS[username]})
-    
+
+    session = Session()
+    existing = session.query(APIKey).filter_by(username=username).first()
+    if existing:
+        session.close()
+        return jsonify({"message": "User already exists", "api_key": existing.api_key})
+
     api_key = str(uuid.uuid4())[:12]
-    API_KEYS[username] = api_key
-    save_keys(API_KEYS)
+    new_user = APIKey(username=username, api_key=api_key)
+    session.add(new_user)
+    session.commit()
+    session.close()
+
     return jsonify({"username": username, "api_key": api_key})
+
 
 # Initialize with logistic regression by default
 manager = ModelManager(model_type='logistic')
