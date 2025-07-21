@@ -6,7 +6,7 @@ import json
 import uuid
 import os
 
-from db import init_db
+from db import init_db, Session, APIKey
 init_db()
 app = Flask(__name__)
 

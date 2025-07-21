@@ -1,35 +1,26 @@
 from sqlalchemy import create_engine, Column, String
-from sqlalchemy.orm import declarative_base, sessionmaker
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
 import os
 
-DB_PATH = os.getenv("DB_PATH", "sqlite:///keys.db")
+# Database path setup
+DB_PATH = os.getenv("DB_PATH", "keys.db")
+DB_URL = f"sqlite:///{DB_PATH}"
 
-# SQLAlchemy setup
-engine = create_engine(DB_PATH, connect_args={"check_same_thread": False})
-SessionLocal = sessionmaker(bind=engine)
+# Create the engine and base
+engine = create_engine(DB_URL, echo=False, connect_args={"check_same_thread": False})
 Base = declarative_base()
 
-# Model
+# Define the APIKey model
 class APIKey(Base):
-    __tablename__ = "api_keys"
-    key = Column(String, primary_key=True, unique=True)
+    __tablename__ = 'api_keys'
+    username = Column(String, primary_key=True)
+    api_key = Column(String, unique=True)
 
-# Initialize DB
+# Session factory
+Session = sessionmaker(bind=engine)
+
+# Initialize the database
 def init_db():
-    Base.metadata.create_all(bind=engine)
-
-# Utility functions
-def is_valid_key(key):
-    session = SessionLocal()
-    exists = session.query(APIKey).filter(APIKey.key == key).first() is not None
-    session.close()
-    return exists
-
-def add_api_key(key):
-    session = SessionLocal()
-    if not session.query(APIKey).filter(APIKey.key == key).first():
-        new_key = APIKey(key=key)
-        session.add(new_key)
-        session.commit()
-    session.close()
+    Base.metadata.create_all(engine)
 
