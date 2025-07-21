@@ -17,13 +17,14 @@ class ESP_ML_Client {
     int getServerPrediction(const char *server_url, float *features);
     bool setModelType(const char *server_url, const char *model_type, int max_depth = 3);
     int predict_class(float *features, float *weights, float bias);
-
+    void setApiKey(const char* key);
   private:
     int n_features;
     int max_samples;
     int current_index;
     float **X_buffer;
     float *y_buffer;
+    const char* api_key;
 };
 
 #endif

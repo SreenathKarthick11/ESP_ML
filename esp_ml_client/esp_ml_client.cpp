@@ -57,11 +57,17 @@ bool ESP_ML_Client::sendDataToServer(const char *server_url, const String &json_
   HTTPClient http;
   http.begin(server_url);
   http.addHeader("Content-Type", "application/json");
-  int httpResponseCode = http.POST(json_payload);
 
+  // ✅ Add API Key Header
+  if (api_key != nullptr) {
+    http.addHeader("X-API-Key", api_key);
+  }
+
+  int httpResponseCode = http.POST(json_payload);
   http.end();
-  return httpResponseCode > 0;
+  return httpResponseCode == 200;
 }
+
 
 bool ESP_ML_Client::getWeights(const char *server_url, float *weights, float &bias) {
   HTTPClient http;
@@ -121,6 +127,12 @@ int ESP_ML_Client::getServerPrediction(const char *server_url, float *features) 
 
   http.begin(server_url);
   http.addHeader("Content-Type", "application/json");
+
+  // ✅ Add API Key Header
+  if (api_key != nullptr) {
+    http.addHeader("X-API-Key", api_key);
+  }
+
   int httpResponseCode = http.POST(payload);
 
   if (httpResponseCode > 0) {
@@ -136,6 +148,7 @@ int ESP_ML_Client::getServerPrediction(const char *server_url, float *features) 
   return -1;  // Return -1 on failure
 }
 
+
 bool ESP_ML_Client::setModelType(const char *server_url, const char *model_type, int max_depth) {
   HTTPClient http;
   StaticJsonDocument<256> doc;
@@ -147,8 +160,19 @@ bool ESP_ML_Client::setModelType(const char *server_url, const char *model_type,
 
   http.begin(server_url);
   http.addHeader("Content-Type", "application/json");
-  int httpResponseCode = http.POST(payload);
 
+  // ✅ Add this line to include API key
+  if (api_key != nullptr) {
+    http.addHeader("X-API-Key", api_key);
+  }
+
+  int httpResponseCode = http.POST(payload);
   http.end();
+
   return httpResponseCode == 200;
+}
+
+
+void ESP_ML_Client::setApiKey(const char* key) {
+  this->api_key = key;
 }
