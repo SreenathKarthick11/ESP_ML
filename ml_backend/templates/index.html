@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ML API Registration</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background: #f5f5f5; }
+        h1 { color: #333; }
+        form { background: white; padding: 20px; border-radius: 8px; max-width: 400px; }
+        input { width: 100%; padding: 10px; margin-top: 10px; }
+        button { padding: 10px 20px; margin-top: 15px; background-color: #007BFF; color: white; border: none; }
+        .result { margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h1>Register for ML API Key</h1>
+    <p>This platform allows you to train and use lightweight machine learning models (logistic regression or decision trees) via a simple HTTP API. Useful for IoT or embedded systems.</p>
+
+    <form id="registerForm">
+        <label>Username:</label><br>
+        <input type="text" id="username" required><br>
+        <button type="submit">Register</button>
+    </form>
+
+    <div class="result" id="result"></div>
+
+    <script>
+        const form = document.getElementById("registerForm");
+        form.onsubmit = async function (e) {
+            e.preventDefault();
+            const username = document.getElementById("username").value;
+            const response = await fetch("/register_user", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ username })
+            });
+            const data = await response.json();
+            const result = document.getElementById("result");
+            if (data.api_key) {
+                result.innerHTML = `<strong>API Key for ${data.username}:</strong><br>${data.api_key}`;
+            } else {
+                result.innerHTML = `<strong>Error:</strong> ${data.message || data.error}`;
+            }
+        };
+    </script>
+</body>
+</html>

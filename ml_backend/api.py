@@ -1,5 +1,5 @@
 # ml_backend/api.py
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from model_manager import ModelManager
 import numpy as np
 import json
@@ -99,6 +99,10 @@ def set_model():
         return jsonify({"message": f"Model set to {model_type} with depth={max_depth}"})
     except ValueError as e:
         return jsonify({"error": str(e)}), 400
+
+@app.route('/')
+def homepage():
+    return render_template("index.html")
     
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
