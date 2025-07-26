@@ -1,30 +1,124 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>ML API Registration</title>
+    <meta charset="UTF-8">
+    <title>ESP ML API Registration</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        body { font-family: Arial, sans-serif; padding: 20px; background: #f5f5f5; }
-        h1 { color: #333; }
-        form { background: white; padding: 20px; border-radius: 8px; max-width: 400px; }
-        input { width: 100%; padding: 10px; margin-top: 10px; }
-        button { padding: 10px 20px; margin-top: 15px; background-color: #007BFF; color: white; border: none; }
-        .result { margin-top: 20px; }
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f4f7f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .container {
+            background: #fff;
+            padding: 30px 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 500px;
+        }
+
+        h1 {
+            margin-top: 0;
+            font-size: 24px;
+            color: #222;
+            text-align: center;
+        }
+
+        p {
+            font-size: 14px;
+            color: #666;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 15px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056c3;
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f0f8ff;
+            border-left: 4px solid #007BFF;
+            border-radius: 6px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+
+        .download-link {
+            display: block;
+            text-align: center;
+            margin-top: 25px;
+            text-decoration: none;
+        }
+
+        .download-link button {
+            width: auto;
+            background-color: #28a745;
+        }
+
+        .download-link button:hover {
+            background-color: #1e7e34;
+        }
     </style>
 </head>
 <body>
-    <h1>Register for ML API Key</h1>
-    <p>This platform allows you to train and use lightweight machine learning models (logistic regression or decision trees) via a simple HTTP API. Useful for IoT or embedded systems.</p>
+    <div class="container">
+        <h1>ESP ML API Key Registration</h1>
+        <p>Register below to generate your API key and download the ESP ML client library. Designed for lightweight IoT ML inference.</p>
 
-    <form id="registerForm">
-        <label>Username:</label><br>
-        <input type="text" id="username" required><br>
-        <button type="submit">Register</button>
-    </form>
+        <form id="registerForm">
+            <label for="username">Username</label>
+            <input type="text" id="username" required placeholder="Enter your username">
+            <button type="submit">Register & Get API Key</button>
+        </form>
 
-    <div class="result" id="result"></div>
-    <a href="/static/esp_ml_client.zip" download>
-        <button>Download Model ZIP</button>
-    </a>
+        <div class="result" id="result"></div>
+
+        <a class="download-link" href="/static/esp_ml_client.zip" download>
+            <button>Download ESP ML Client ZIP</button>
+        </a>
+    </div>
+
     <script>
         const form = document.getElementById("registerForm");
         form.onsubmit = async function (e) {
@@ -37,8 +131,9 @@
             });
             const data = await response.json();
             const result = document.getElementById("result");
+
             if (data.api_key) {
-                result.innerHTML = `<strong>API Key for ${data.username}:</strong><br>${data.api_key}`;
+                result.innerHTML = `API Key for <strong>${data.username}</strong>:\n${data.api_key}`;
             } else {
                 result.innerHTML = `<strong>Error:</strong> ${data.message || data.error}`;
             }
