@@ -34,7 +34,7 @@ def register_user():
     existing = session.query(APIKey).filter_by(username=username).first()
     if existing:
         session.close()
-        return jsonify({"message": "User already exists", "api_key": existing.api_key})
+        return jsonify({"new_user": False,"username": username, "api_key": existing.api_key})
 
     api_key = str(uuid.uuid4())[:12]
     new_user = APIKey(username=username, api_key=api_key)
@@ -42,7 +42,7 @@ def register_user():
     session.commit()
     session.close()
 
-    return jsonify({"username": username, "api_key": api_key})
+    return jsonify({"new_user": True,"message":"User already exists","username": username, "api_key": api_key})
 
 
 # Initialize with logistic regression by default

@@ -1,143 +1,212 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>ESP ML API Registration</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            background: #f4f7f9;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-        }
-
-        .container {
-            background: #fff;
-            padding: 30px 40px;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            width: 90%;
-            max-width: 500px;
-        }
-
-        h1 {
-            margin-top: 0;
-            font-size: 24px;
-            color: #222;
-            text-align: center;
-        }
-
-        p {
-            font-size: 14px;
-            color: #666;
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-        }
-
-        input[type="text"] {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 20px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            font-size: 14px;
-        }
-
-        button {
-            width: 100%;
-            padding: 12px;
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 15px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        button:hover {
-            background-color: #0056c3;
-        }
-
-        .result {
-            margin-top: 20px;
-            padding: 15px;
-            background-color: #f0f8ff;
-            border-left: 4px solid #007BFF;
-            border-radius: 6px;
-            font-family: monospace;
-            white-space: pre-wrap;
-        }
-
-        .download-link {
-            display: block;
-            text-align: center;
-            margin-top: 25px;
-            text-decoration: none;
-        }
-
-        .download-link button {
-            width: auto;
-            background-color: #28a745;
-        }
-
-        .download-link button:hover {
-            background-color: #1e7e34;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>ESP ML Client – Lightweight IoT ML</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <div class="container">
-        <h1>ESP ML API Key Registration</h1>
-        <p>Register below to generate your API key and download the ESP ML client library. Designed for lightweight IoT ML inference.</p>
 
-        <form id="registerForm">
-            <label for="username">Username</label>
-            <input type="text" id="username" required placeholder="Enter your username">
-            <button type="submit">Register & Get API Key</button>
-        </form>
+  <header>
+    <h1>ESP ML Client</h1>
+    <p>Deploy sensor-based machine learning on ESP32 devices using lightweight logistic regression and real-time inference — powered by your own backend server.</p>
+    <a href="#register" class="button">Register & Get Started</a>
+    <a href="#download" class="button">Download Library</a>
+  </header>
 
-        <div class="result" id="result"></div>
+  <section id="register">
+    <h2>Register for Your API Key</h2>
+    <form id="registerForm">
+      <label for="username">Username</label>
+      <input type="text" id="username" placeholder="Enter your username" required>
+      <button type="submit">Register & Get API Key</button>
+    </form>
+    <div class="result" id="result"></div>
+  </section>
+  <section id="library-docs" style="margin-top: 50px">
+    <h2>📘 ESP_ML_Client Library Documentation</h2>
+    <p>This section explains the functions available in the <code>ESP_ML_Client</code> library used in your ESP32 sketch (.ino file).</p>
 
-        <a class="download-link" href="/static/esp_ml_client.zip" download>
-            <button>Download ESP ML Client ZIP</button>
-        </a>
+    <div class="function">
+        <h3>ESP_ML_Client(int n_features, int max_samples = 100)</h3>
+        <p><strong>Description:</strong> Constructor to initialize a new client instance.</p>
+        <ul>
+        <li><strong>n_features:</strong> Number of input features per sample.</li>
+        <li><strong>max_samples:</strong> (Optional) Max number of samples to buffer.</li>
+        </ul>
     </div>
 
-    <script>
-        const form = document.getElementById("registerForm");
-        form.onsubmit = async function (e) {
-            e.preventDefault();
-            const username = document.getElementById("username").value;
-            const response = await fetch("/register_user", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ username })
-            });
-            const data = await response.json();
-            const result = document.getElementById("result");
+    <div class="function">
+        <h3>void appendSample(float* features, float label)</h3>
+        <p><strong>Description:</strong> Appends a training sample to the buffer.</p>
+        <ul>
+        <li><strong>features:</strong> Array of input values.</li>
+        <li><strong>label:</strong> Expected class label (0 or 1).</li>
+        </ul>
+    </div>
 
-            if (data.api_key) {
-                result.innerHTML = `API Key for <strong>${data.username}</strong>:\n${data.api_key}`;
-            } else {
-                result.innerHTML = `<strong>Error:</strong> ${data.message || data.error}`;
-            }
-        };
-    </script>
+    <div class="function">
+        <h3>String createJsonPayload()</h3>
+        <p><strong>Description:</strong> Converts all buffered samples to JSON format for server training.</p>
+        <p><strong>Returns:</strong> JSON string like <code>{ "X": [[...]], "y": [...] }</code></p>
+    </div>
+
+    <div class="function">
+        <h3>bool sendDataToServer(const char* url, const String& payload)</h3>
+        <p><strong>Description:</strong> Sends the training data to the backend server.</p>
+        <p><strong>Returns:</strong> <code>true</code> if upload is successful.</p>
+    </div>
+
+    <div class="function">
+        <h3>bool getWeights(const char* url, float* weights, float& bias)</h3>
+        <p><strong>Description:</strong> Downloads model weights and bias from the server.</p>
+        <p><strong>Returns:</strong> <code>true</code> if data is successfully parsed.</p>
+    </div>
+
+    <div class="function">
+        <h3>float predict(float* features, float* weights, float bias)</h3>
+        <p><strong>Description:</strong> Makes a logistic regression prediction.</p>
+        <p><strong>Returns:</strong> Probability between 0.0 and 1.0.</p>
+    </div>
+
+    <div class="function">
+        <h3>int predict_class(float* features, float* weights, float bias)</h3>
+        <p><strong>Description:</strong> Predicts class based on probability threshold of 0.5.</p>
+        <p><strong>Returns:</strong> <code>0</code> or <code>1</code>.</p>
+    </div>
+
+    <div class="function">
+        <h3>int getServerPrediction(const char* url, float* features)</h3>
+        <p><strong>Description:</strong> Sends a sample to the server and gets predicted class.</p>
+        <p><strong>Returns:</strong> <code>0</code>, <code>1</code> or <code>-1</code> on failure.</p>
+    </div>
+
+    <div class="function">
+        <h3>bool setModelType(const char* url, const char* model_type, int max_depth)</h3>
+        <p><strong>Description:</strong> Tells the backend what model to use (e.g., "logistic" or "tree").</p>
+        <p><strong>Returns:</strong> <code>true</code> if successful.</p>
+    </div>
+
+    <div class="function">
+        <h3>void setApiKey(const char* key)</h3>
+        <p><strong>Description:</strong> Sets the API key header for authentication.</p>
+        <p><strong>Parameter:</strong> <code>key</code> – API key string provided during registration.</p>
+    </div>
+  </section>
+
+  <section id="example">
+    <h2>Arduino Example: ESP ML Client Full Flow</h2>
+    <pre><code>#include &lt;WiFi.h&gt;
+#include &lt;HTTPClient.h&gt;
+#include &lt;ArduinoJson.h&gt;
+#include &lt;esp_ml_client.h&gt;  // Your library
+
+const char* ssid = &quot;Your SSID&quot;;
+const char* password = &quot;"Your Wifi password&quot;;
+const char* base_url = "https://esp-ml-backend.onrender.com";
+const char* hardcoded_api_key = &quot;Your API KEY &quot;; 
+
+ESP_ML_Client ml_client(3);  // 3 features
+
+void connectWiFi() {
+  WiFi.begin(ssid, password);
+  Serial.print("Connecting to WiFi");
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println("\\n WiFi Connected!");
+}
+
+void trainAndPredict(const char* model_type, int max_depth = 3) {
+  Serial.println("\\n==============================");
+  Serial.print(" Setting model: ");
+  Serial.println(model_type);
+
+  String set_model_url = String(base_url) + "/set_model";
+  if (ml_client.setModelType(set_model_url.c_str(), model_type, max_depth)) {
+    Serial.println("✅ Model type set successfully");
+  } else {
+    Serial.println("❌ Failed to set model");
+    return;
+  }
+
+  float sample1[3] = {1.0, 0.5, -0.3};
+  float sample2[3] = {0.7, -0.2, 0.9};
+  ml_client.appendSample(sample1, 1.0);
+  ml_client.appendSample(sample2, 0.0);
+
+  String upload_url = String(base_url) + "/upload_data";
+  String json_payload = ml_client.createJsonPayload();
+  if (ml_client.sendDataToServer(upload_url.c_str(), json_payload)) {
+    Serial.println("✅ Training data sent");
+  } else {
+    Serial.println("❌ Training data upload failed");
+    return;
+  }
+
+  delay(1000);
+
+  float test_sample[3] = {0.8, -0.1, 0.4};
+  String predict_url = String(base_url) + "/predict_class";
+  int predicted = ml_client.getServerPrediction(predict_url.c_str(), test_sample);
+
+  if (predicted != -1) {
+    Serial.print("🎯 Predicted class: ");
+    Serial.println(predicted);
+  } else {
+    Serial.println("❌ Prediction failed");
+  }
+}
+
+void setup() {
+  Serial.begin(115200);
+  connectWiFi();
+  ml_client.setApiKey(hardcoded_api_key);
+  trainAndPredict("logistic");
+  delay(2000);
+  trainAndPredict("tree", 4);
+}
+
+void loop() {}
+    </code></pre>
+  </section>
+
+  <section id="download">
+    <h2>Download the Library</h2>
+    <p>Click below to download the ESP ML Client (.zip format) and import it into Arduino IDE via Sketch → Include Library → Add .ZIP Library...</p>
+    <div class="download-link">
+      <a href="/static/esp_ml_client.zip" download>
+        <button>Download ESP_ML_Client.zip</button>
+      </a>
+    </div>
+  </section>
+
+  <footer>
+    &copy; 2025 ESP ML Project · Built by M Sreenath Karthick
+  </footer>
+
+  <script>
+    const form = document.getElementById("registerForm");
+    form.onsubmit = async function (e) {
+      e.preventDefault();
+      const username = document.getElementById("username").value;
+      const response = await fetch("/register_user", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username })
+      });
+
+      const data = await response.json();
+      const result = document.getElementById("result");
+
+      if (data.new_user) {
+        result.innerHTML = `API Key for <strong>${data.username}</strong>:\n${data.api_key}`;
+      } else {
+        result.innerHTML = `<strong>Error:</strong> ${data.message || data.error}`;
+      }
+    };
+  </script>
 </body>
 </html>
