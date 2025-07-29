@@ -34,7 +34,7 @@ def register_user():
     existing = session.query(APIKey).filter_by(username=username).first()
     if existing:
         session.close()
-        return jsonify({"new_user": False,"username": username, "api_key": existing.api_key})
+        return jsonify({"new_user": False,"message":"User already exists","username": username, "api_key": existing.api_key})
 
     api_key = str(uuid.uuid4())[:12]
     new_user = APIKey(username=username, api_key=api_key)

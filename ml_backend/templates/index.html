@@ -5,15 +5,34 @@
   <title>ESP ML Client – Lightweight IoT ML</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
 
   <header>
     <h1>ESP ML Client</h1>
-    <p>Deploy sensor-based machine learning on ESP32 devices using lightweight logistic regression and real-time inference — powered by your own backend server.</p>
+    <p>Deploy sensor-based machine learning on ESP32 devices using lightweight logistic regression and real-time inference — powered by a backend server.</p>
     <a href="#register" class="button">Register & Get Started</a>
+    <a href="#library-docs" class="button">Documentation</a>
+    <a href="#example" class="button">Example Code</a>
     <a href="#download" class="button">Download Library</a>
   </header>
+
+  <section id="esp-ml-intro">
+    <h2>About ESP_ML</h2>
+    <p>
+        <strong>ESP_ML</strong> is a lightweight machine learning client library designed for the ESP32 microcontroller platform. 
+        It enables seamless communication between edge devices and cloud-hosted ML models via REST APIs. 
+        With support for real-time data acquisition, buffering, and secure API-based requests, ESP_ML allows developers to collect sensor data, 
+        send it to a remote server for inference, and receive predictions efficiently. This project bridges the gap between low-power embedded systems 
+        and powerful ML models, making intelligent edge computing accessible and scalable for IoT applications.
+    </p>
+  </section>
+
+  <section id="data-flow">
+    <h2>Data Flow Cycle in ESP_ML System</h2>
+    <img src="{{ url_for('static', filename='flow.png') }}" alt="Flow" class="fixed-image">
+  </section>
 
   <section id="register">
     <h2>Register for Your API Key</h2>
@@ -204,7 +223,7 @@ void loop() {}
       if (data.new_user) {
         result.innerHTML = `API Key for <strong>${data.username}</strong>:\n${data.api_key}`;
       } else {
-        result.innerHTML = `<strong>Error:</strong> ${data.message || data.error}`;
+        result.innerHTML = `<strong>Error:</strong> ${data.message}`;
       }
     };
   </script>

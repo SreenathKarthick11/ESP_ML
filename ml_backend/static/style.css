@@ -5,13 +5,13 @@
 
 body {
     margin: 0;
-    font-family: 'Segoe UI', sans-serif;
+    font-family: 'Poppins', sans-serif;
     background-color: #0d1117;
     color: #c9d1d9;
 }
 
 header {
-    background-color: #1f6feb;
+    background-color: #1b51a1;
     color: white;
     padding: 50px 20px;
     text-align: center;
@@ -68,6 +68,12 @@ label {
     margin: 10px 0 5px;
 }
 
+.fixed-image {
+  width: 800px;
+  height: 600px;
+  object-fit: cover;
+}
+
 input[type="text"] {
     width: 100%;
     padding: 10px;
@@ -86,10 +92,11 @@ button {
     border-radius: 6px;
     font-size: 15px;
     cursor: pointer;
+    transition: background 0.3s;
 }
 
 button:hover {
-    background-color: #388bfd;
+    background-color: #043375;
 }
 
 .result {
@@ -142,7 +149,7 @@ button:hover {
 }
 
 pre {
-    background-color: #161b22;
+    background-color: #22282fe3;
     padding: 15px;
     border-radius: 6px;
     overflow-x: auto;
@@ -156,6 +163,7 @@ pre {
 
 .download-link button {
     background-color: #2ea043;
+    transition: background 0.3s;
 }
 
 .download-link button:hover {
