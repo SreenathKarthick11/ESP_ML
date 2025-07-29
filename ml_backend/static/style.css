@@ -6,12 +6,12 @@
 body {
     margin: 0;
     font-family: 'Segoe UI', sans-serif;
-    background-color: #f5f7fa;
-    color: #333;
+    background-color: #0d1117;
+    color: #c9d1d9;
 }
 
 header {
-    background-color: #007BFF;
+    background-color: #1f6feb;
     color: white;
     padding: 50px 20px;
     text-align: center;
@@ -34,8 +34,8 @@ header p {
     display: inline-block;
     margin-top: 30px;
     padding: 12px 25px;
-    background-color: #fff;
-    color: #007BFF;
+    background-color: white;
+    color: #161b22;
     border: 2px solid white;
     border-radius: 6px;
     font-size: 16px;
@@ -44,18 +44,23 @@ header p {
 }
 
 .button:hover {
-    background-color: #e0f0ff;
+    background-color: #161b22;
+    color: white;
 }
 
 section {
-    padding: 50px 20px;
+    padding: 20px 20px;
     max-width: 800px;
     margin: 0 auto;
+    margin-top: 30px;
+    background-color: #161b22;
+    border-radius: 10px;
 }
 
 h2 {
     font-size: 24px;
     margin-bottom: 20px;
+    color: #58a6ff;
 }
 
 label {
@@ -67,13 +72,15 @@ input[type="text"] {
     width: 100%;
     padding: 10px;
     border-radius: 6px;
-    border: 1px solid #ccc;
+    background-color: #0d1117;
+    border: 1px solid #30363d;
+    color: #c9d1d9;
 }
 
 button {
     padding: 12px 20px;
     margin-top: 15px;
-    background-color: #007BFF;
+    background-color: #1f6feb;
     color: white;
     border: none;
     border-radius: 6px;
@@ -82,24 +89,64 @@ button {
 }
 
 button:hover {
-    background-color: #0056c3;
+    background-color: #388bfd;
 }
 
 .result {
     margin-top: 20px;
-    background-color: #f0f8ff;
-    border-left: 4px solid #007BFF;
+    background-color: #161b22;
+    border-left: 4px solid #1f6feb;
     padding: 15px;
     border-radius: 6px;
     font-family: monospace;
     white-space: pre-wrap;
 }
 
+#library-docs {
+    background-color: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    padding: 30px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+#library-docs h2 {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    color: #58a6ff;
+}
+
+#library-docs .function {
+    margin-bottom: 35px;
+}
+
+#library-docs .function h3 {
+    font-family: 'Courier New', monospace;
+    background-color: #0d1117;
+    padding: 8px;
+    border-left: 4px solid #1f6feb;
+    font-size: 1rem;
+    color: #c9d1d9;
+}
+
+#library-docs p, #library-docs li {
+    font-size: 1rem;
+}
+
+#library-docs code {
+    background-color: #21262d;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    color: #79c0ff;
+}
+
 pre {
-    background-color: #eee;
+    background-color: #161b22;
     padding: 15px;
     border-radius: 6px;
     overflow-x: auto;
+    color: #c9d1d9;
 }
 
 .download-link {
@@ -108,16 +155,17 @@ pre {
 }
 
 .download-link button {
-    background-color: #28a745;
+    background-color: #2ea043;
 }
 
 .download-link button:hover {
-    background-color: #1e7e34;
+    background-color: #145f23;
 }
 
 footer {
     text-align: center;
     padding: 20px;
-    background: #eee;
-    color: #555;
+    background: #161b22;
+    color: #8b949e;
+    margin-top: 30px;
 }
