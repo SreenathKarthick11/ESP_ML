@@ -170,6 +170,26 @@ pre {
     background-color: #145f23;
 }
 
+#contributors {
+  padding: 40px 20px;
+  background-color: #0a0a0a;
+  color: #fff;
+}
+
+#contributors h2, #contributors h3 {
+  font-family: 'Poppins', sans-serif;
+}
+
+#contributors a {
+  color: #4caeff;
+  margin-right: 15px;
+  text-decoration: none;
+}
+
+#contributors a:hover {
+  text-decoration: underline;
+}
+
 footer {
     text-align: center;
     padding: 20px;
