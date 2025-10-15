@@ -117,12 +117,12 @@ void loop() {
 
 ## Features
 
-✅ Real-time sensor data acquisition
-✅ Lightweight REST communication for embedded systems
-✅ Cloud-hosted ML inference via Flask
-✅ Modular architecture — replaceable backend or model
-✅ Easy ESP32 integration
-✅ Optional visualization dashboard (HTML templates)
+✅ Real-time sensor data acquisition \
+✅ Lightweight REST communication for embedded systems \
+✅ Cloud-hosted ML inference via Flask \
+✅ Modular architecture — replaceable backend or model \
+✅ Easy ESP32 integration \
+✅ Optional visualization dashboard (HTML templates) \
 
 ---
 
