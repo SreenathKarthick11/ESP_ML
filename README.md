@@ -122,7 +122,7 @@ void loop() {
 ✅ Cloud-hosted ML inference via Flask \
 ✅ Modular architecture — replaceable backend or model \
 ✅ Easy ESP32 integration \
-✅ Optional visualization dashboard (HTML templates) \
+✅ Optional visualization dashboard (HTML templates) 
 
 ---
 
@@ -176,7 +176,7 @@ requests
 
 * Arduino Core for ESP32
 * WiFiClient / HTTPClient (built-in)
-* ArduinoJson (if used)
+* ArduinoJson 
 
 ---
 
